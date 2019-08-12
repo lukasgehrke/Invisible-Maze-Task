@@ -9,6 +9,7 @@ resources/model/
 *.cfg
 *.avi
 *.db
+*.gif
 
 
 # Byte-compiled / optimized / DLL files
