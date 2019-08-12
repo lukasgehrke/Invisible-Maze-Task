@@ -1,0 +1,33 @@
+- HED tag dictionary
+- Instruction dictionary
+- build Wiimote "drawstick"
+- link vizard pencil to wiimote "drawstick" RB object
+
+- extend networking app to create phasespace plot (live wall touch plot):
+it takes data from phasespace (via LSL, of course) and checks to see if what are defined as head and hand markers are
+in contact with one of the walls of the audioMaze object. If so, it works out how close the head/hand is to the wall
+and what the angle is from that point on the wall and the head. This information is used by the audio engine to play
+the appropriate sound from the appropriate angle in the room. It also checks for proximity to the audio landmark tokens
+and some other stuff.
+
+Info von Klaus:
+==============
+
+maze
+eine hand, wände ertasten, visuelles feedback (wellen) nimmt quadratisch in der intensität ab, audio feedback (nur für debug-Zwecke)
+zunächst: einfache kreuz maze
+wände 3 m hoch
+gangbreite 2m
+erstmal visual (Wände) gestützt, damit man prüfen kann
+
+-----
+
+notwendige Anpassungen:
+
+- Wände/Maze geometry über ini-File einlesen
+- Ausrichtung der collision animation automatisch über Normalenvektor der Wand bestimmen (dann kann die Kugel in der Animation frei durch das Maze fliegen, anstatt nur in einer Richtung)
+- alles homogen objekt-orientiert programmieren (bspw. playBounceVid als method der sphere)
+- ggf. einzelne Kreise als Texturen mit Animationspfaden versehen (anstatt des halbtransparenten Videos -> deutlich mehr Flexibilität)
+- the collision point usually is slightly in/behind the wall (because we do physics ourselves: the sphere moves for another frame until it intersects)
+- in the demo: invert walls so that z-fighting can't be an issue (later: invisible walls)
+- in the demo: still we have double collisions sometimes (back and forth; a refractary phase would solves this, but the sphere is not flipping in the experiment)
