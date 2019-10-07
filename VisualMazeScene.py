@@ -78,21 +78,21 @@ class VisualMazeScene(BaseScene):
         self.coin.visible(viz.ON)
         completed = viz.link(viz.MainView, self.coin)
         completed.preTrans([-.3, 0, 2])
-		reward = 1/3
+        reward = .33
 
         if duration <= 300:
             dur_coin = self.coin.copy()
             fast = viz.link(viz.MainView, dur_coin)
             fast.preTrans([.2, 0, 2])
-			reward += 1/3
+            reward += .33
 
         if head_hits <= 10:
             head_coin = self.coin.copy()
             precise = viz.link(viz.MainView, head_coin)
             precise.preTrans([.7, 0, 2])
-			reward += 1/3
+            reward += .33
 
-		print round(reward,2)
+        print 'Reward:' + str(reward)
         yield viztask.waitTime(show_duration)
 
         self.coin.visible(viz.OFF)

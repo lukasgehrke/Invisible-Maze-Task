@@ -648,7 +648,7 @@ class VisualMaze(BaseExperiment):
             self.maze.maze_end_ground.visible(viz.ON)
 
         self.local_landmark_hits += 1
-        #self.log_exp_progress('type:enter_local_landmark;num_local_landmark:' + str(self.local_landmark_hits) + ';')
+        self.log_exp_progress('type:enter_local_landmark;num_local_landmark:' + str(self.local_landmark_hits) + ';')
 
     def exit_local_landmark(self, proximity_event):
 
@@ -656,7 +656,7 @@ class VisualMaze(BaseExperiment):
             self.maze.maze_start_ground.visible(viz.OFF)
         else:
             self.maze.maze_end_ground.visible(viz.OFF)
-        #self.log_exp_progress('type:exit_local_landmark;')
+        self.log_exp_progress('type:exit_local_landmark;')
 
     def baseline(self):
         # set num_sphere positions of spheres randomly, spheres have to be touched then next sphere appears
@@ -717,8 +717,6 @@ class VisualMaze(BaseExperiment):
             ix = self.trial_list.index('S')
     
         self.trial_list = self.trial_list[ix:]
-
-        # todo test 08/10/19
         print self.trial_list			
 
         if run == 'all':
@@ -727,9 +725,6 @@ class VisualMaze(BaseExperiment):
             self.run_list = [2, 3]
         elif run == '3':
             self.run_list = [3]
-
-        # todo test 08/10/19
-        print self.run_list
 
     def assign_trackers(self, trackers):
         
@@ -765,6 +760,7 @@ class VisualMaze(BaseExperiment):
         trackers = steamvr.getTrackerList()
         self.controller = steamvr.getControllerList()[0]
         print self.controller
+        tracker_names = ['handRigid', 'armRigid', 'torsoRigid']
 
         find_out_tracker = vizact.onupdate(0, self.assign_trackers, trackers)
         yield viztask.waitTime(5) # wait two seconds to figure out which tracker is more to the front in z direction = hand tracker
@@ -772,15 +768,15 @@ class VisualMaze(BaseExperiment):
         
         # create LSL stream for MoBIlab pos and ori analysis --> ori should be in quaternions
         # stream 6dof as pos (x,y,z) and ori(x,y,z,w) --> quaternion
-        hand_stream = self.subject.create_non_phasespace_rigid_body_stream('handRigid', 0)
+        hand_stream = self.subject.create_non_phasespace_rigid_body_stream(tracker_names[self.hand_tracker_id], 0)
         vizact.onupdate(0, self.subject.update_and_push_rigid_body, trackers[self.hand_tracker_id], self.subject.right_hand_sphere, hand_stream)
         
         # create LSL stream for MoBIlab pos and ori analysis --> ori should be in quaternions
-        arm_stream = self.subject.create_non_phasespace_rigid_body_stream('armRigid', 0)
+        arm_stream = self.subject.create_non_phasespace_rigid_body_stream(tracker_names[self.arm_tracker_id], 0)
         vizact.onupdate(0, self.subject.update_and_push_rigid_body, trackers[self.arm_tracker_id], None, arm_stream)
 
         # create LSL stream for MoBIlab pos and ori analysis --> ori should be in quaternions
-        torso_stream = self.subject.create_non_phasespace_rigid_body_stream('torsoRigid', 0)
+        torso_stream = self.subject.create_non_phasespace_rigid_body_stream(tracker_names[self.torso_tracker_id], 0)
         vizact.onupdate(0, self.subject.update_and_push_rigid_body, trackers[self.torso_tracker_id], None, torso_stream)
 
     def trial(self):
